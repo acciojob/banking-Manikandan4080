@@ -19,6 +19,7 @@ public class SavingsAccount extends BankAccount{
         return maxWithdrawalLimit;
     }
 
+    @Override
     public void withdraw(double amount) throws InsuffecientBalance{
         // Might throw the following errors:
         // 1. "Maximum Withdraw Limit Exceed" : If the amount exceeds maximum withdrawal limit

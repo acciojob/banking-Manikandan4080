@@ -43,8 +43,7 @@ public class CurrentAccount extends BankAccount{
         int n = id.length();
         Map<Character, Integer> countMap = new HashMap<>();
         for(char ch : id.toCharArray()){
-            int val = countMap.getOrDefault(ch, 0);
-            countMap.put(ch, val+1);
+            countMap.put(ch, countMap.getOrDefault(ch, 0)+1);
         }
 
         char maxRepeating = getMaxRepeatning(countMap);
@@ -76,7 +75,7 @@ public class CurrentAccount extends BankAccount{
         return res.toString();
     }
     private char getMaxRepeatning(Map<Character, Integer> hm){
-        int max = 0;
+        int max = Integer.MIN_VALUE;
         char ch = ' ';
         for(char c : hm.keySet()){
             if(hm.get(c) > max){
