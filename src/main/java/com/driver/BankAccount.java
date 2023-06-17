@@ -24,40 +24,50 @@ public class BankAccount {
         return minBalance;
     }
 
-    public String generateAccountNumber(int digits, int sum) throws AccountNoException{
+    public String generateAccountNumber(int digits, int sum) throws Exception{
         //Each digit of an account number can lie between 0 and 9 (both inclusive)
         //Generate account number having given number of 'digits' such that the sum of digits is equal to 'sum'
         //If it is not possible, throw "Account Number can not be generated" exception
-        if(digits < 1 || sum < 0 || sum > 9*digits){
-            throw new AccountNoException();
-        }
 
+        int rem = sum;
+        String accNo = "";
+        if(digits*9 < sum){
+            throw new Exception("Account Number can not be generated");
+        }
         else{
-            StringBuilder accNo = new StringBuilder();
-            int rem = sum;
-            for (int i = 0; i < digits - 1; i++) {
-                int dig = Math.min(rem, 9);
-                accNo.append(dig);
-                rem -= dig;
+            while(digits > 0 && rem > 0){
+                if(rem >= 9){
+                    rem = rem - 9;
+                    accNo = accNo + "9";
+                }
+                else{
+                    accNo = accNo + Integer.toString(rem);
+                    rem = 0;
+                }
+                digits--;
             }
-            accNo.append(rem);
-            return accNo.toString();
+            while(digits > 0){
+                accNo = accNo + "0";
+                digits--;
+            }
+            return accNo;
         }
     }
 
     public void deposit(double amount) {
         //add amount to balance
         this.balance += amount;
+
+
     }
 
-    public void withdraw(double amount) throws InsuffecientBalance{
+    public void withdraw(double amount) throws Exception {
         // Remember to throw "Insufficient Balance" exception, if the remaining amount would be less than minimum balance
-        if(this.balance - amount >= this.minBalance){
-            this.balance -= amount;
+        if(this.balance - amount >= getMinBalance()){
+            this.balance = this.balance - amount;
         }
-        else{
-            throw new InsuffecientBalance();
-        }
+        else throw new Exception("Insufficient Balance");
+
     }
 
 }
