@@ -24,23 +24,25 @@ public class BankAccount {
         return minBalance;
     }
 
-    public String generateAccountNumber(int digits, int sum) throws Exception{
+    public String generateAccountNumber(int digits, int sum) throws AccountNoException{
         //Each digit of an account number can lie between 0 and 9 (both inclusive)
         //Generate account number having given number of 'digits' such that the sum of digits is equal to 'sum'
         //If it is not possible, throw "Account Number can not be generated" exception
         if(digits < 1 || sum < 0 || sum > 9*digits){
-            throw new Exception("Account Number can not be generated");
+            throw new AccountNoException();
         }
 
-        StringBuilder accNo = new StringBuilder();
-        int rem = sum;
-        for(int i = 0; i < digits-1; i++){
-            int dig = Math.min(rem, 9);
-            accNo.append(dig);
-            rem -= dig;
+        else{
+            StringBuilder accNo = new StringBuilder();
+            int rem = sum;
+            for (int i = 0; i < digits - 1; i++) {
+                int dig = Math.min(rem, 9);
+                accNo.append(dig);
+                rem -= dig;
+            }
+            accNo.append(rem);
+            return accNo.toString();
         }
-        accNo.append(rem);
-        return accNo.toString();
     }
 
     public void deposit(double amount) {
@@ -48,12 +50,14 @@ public class BankAccount {
         this.balance += amount;
     }
 
-    public void withdraw(double amount) throws Exception {
+    public void withdraw(double amount) throws InsuffecientBalance{
         // Remember to throw "Insufficient Balance" exception, if the remaining amount would be less than minimum balance
-        if(this.balance - amount < this.minBalance){
-            throw new Exception("Insufficient Balance");
+        if(this.balance - amount >= this.minBalance){
+            this.balance -= amount;
         }
-        this.balance -= amount;
+        else{
+            throw new InsuffecientBalance();
+        }
     }
 
 }

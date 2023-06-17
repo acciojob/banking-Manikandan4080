@@ -10,7 +10,7 @@ public class CurrentAccount extends BankAccount{
         // minimum balance is 5000 by default. If balance is less than 5000, throw "Insufficient Balance" exception
         super(name, balance, 5000);
         this.tradeLicenseId = tradeLicenseId;
-        if(balance < 5000) throw new Exception("Insufficient Balance");
+        if(balance < 5000) throw new InsuffecientBalance();
     }
 
     public String getTradeLicenseId() {
@@ -22,20 +22,22 @@ public class CurrentAccount extends BankAccount{
         // If the license Id is valid, do nothing
         // If the characters of the license Id can be rearranged to create any valid license Id
         // If it is not possible, throw "Valid License can not be generated" Exception
-        if(!validId(tradeLicenseId)){
+        if(notValidId(tradeLicenseId)){
             String newId = generateId(tradeLicenseId);
-            if(newId.isEmpty() || newId.equals(" ")) throw new Exception("Valid License can not be generated");
+            if(newId.isEmpty()) throw new ValidIdException();
 
-            this.tradeLicenseId = newId;
+            else{
+                this.tradeLicenseId = newId;
+            }
         }
 
     }
-    private boolean validId(String id){
+    private boolean notValidId(String id){
         int n = id.length();
         for(int i = 0; i < n-1; i++){
-            if(id.charAt(i) == id.charAt(i+1)) return false;
+            if(id.charAt(i) == id.charAt(i+1)) return true;
         }
-        return true;
+        return false;
     }
     private String generateId(String id){
         int n = id.length();
